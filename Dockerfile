@@ -21,9 +21,10 @@ RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.stor
 	&& chmod 755 /opt/chromedriver-$CHROME_DRIVER_VERSION \
 	&& ln -fs /opt/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
 
-# Xvfb
+# dependencies required by puppeteer
 
-RUN apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     gconf-service \
     libasound2 \
     libatk1.0-0 \
