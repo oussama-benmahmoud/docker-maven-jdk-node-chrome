@@ -26,6 +26,8 @@ RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.stor
 RUN apt-get update && \
     apt-get install -y \
     gconf-service \
+    xvfb \
+    libgtk2.0-0 \
     libasound2 \
     libatk1.0-0 \
     libc6 \
