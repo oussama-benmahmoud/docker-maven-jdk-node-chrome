@@ -27,4 +27,4 @@ RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.stor
 RUN apt-get update -qqy \
     && apt-get -qqy install libnss3-tools
 
-RUN export CHROME_BIN=/usr/bin/google-chrome
+ENV CHROME_BIN=/usr/bin/google-chrome
