@@ -63,4 +63,5 @@ RUN apt-get update && \
     libappindicator1 \
     libnss3 \
     lsb-release \
-    xdg-utils
+    xdg-utils \
+    libXScrnSaver-1.2.2-6.1.el7.x86_64
