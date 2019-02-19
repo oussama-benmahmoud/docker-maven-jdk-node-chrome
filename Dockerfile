@@ -1,6 +1,30 @@
 FROM maven:3.5.4-jdk-8
 
-RUN apt-get update -qq && apt-get install -y gconf-service libasound2 libatk1.0-0 libcups2 libdbus-1-3 libgconf-2-4 libgtk-3-0 libnspr4 libx11-xcb1 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome*.deb
+# Google Chrome
+
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+	&& echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+	&& apt-get update -qqy \
+	&& apt-get -qqy install google-chrome-stable \
+	&& apt-get -qqy install google-chrome-unstable \
+	&& rm /etc/apt/sources.list.d/google-chrome.list \
+	&& rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
+	&& sed -i 's/"$HERE\/chrome"/"$HERE\/chrome" --no-sandbox/g' /opt/google/chrome/google-chrome
+
+# ChromeDriver
+
+ARG CHROME_DRIVER_VERSION=2.40
+RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
+	&& rm -rf /opt/chromedriver \
+	&& unzip /tmp/chromedriver_linux64.zip -d /opt \
+	&& rm /tmp/chromedriver_linux64.zip \
+	&& mv /opt/chromedriver /opt/chromedriver-$CHROME_DRIVER_VERSION \
+	&& chmod 755 /opt/chromedriver-$CHROME_DRIVER_VERSION \
+&& ln -fs /opt/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
+
+# Cert. stuff (certutil ...)
+
+RUN apt-get update -qqy \
+    && apt-get -qqy install libnss3-tools
+
 RUN export CHROME_BIN=/usr/bin/google-chrome
