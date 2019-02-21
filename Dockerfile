@@ -7,7 +7,7 @@ RUN echo "# Installing Nodejs" && \
     apt-get install nodejs build-essential -y && \
     npm set strict-ssl false && \
     npm install -g npm@latest && \
-    npm install node-sass@latest
+    npm install node-sass@latest && \
     npm cache clear -f && \
     npm install -g n && \
     n stable
@@ -38,6 +38,6 @@ RUN echo "# Installing ChromeDriver" \
 	&& rm /tmp/chromedriver_linux64.zip \
 	&& mv /opt/chromedriver /opt/chromedriver-$CHROME_DRIVER_VERSION \
 	&& chmod 755 /opt/chromedriver-$CHROME_DRIVER_VERSION \
-&& ln -fs /opt/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
+    && ln -fs /opt/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
 
 ENV CHROME_BIN=/usr/bin/google-chrome
