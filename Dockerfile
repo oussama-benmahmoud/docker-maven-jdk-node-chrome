@@ -1,8 +1,23 @@
 FROM maven:3.5.4-jdk-8
 
+# Node & NPM
+ARG NODE_VERSION=11
+RUN echo "# Installing Nodejs" && \
+    curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
+    apt-get install nodejs build-essential -y && \
+    npm set strict-ssl false && \
+    npm install -g npm@latest && \
+    npm install node-sass@latest
+    npm cache clear -f
+
+# confirm installation
+RUN node -v
+RUN npm -v
+
 # Google Chrome
 
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+RUN echo "# Installing Google Chrome" \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 	&& echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 	&& apt-get update -qqy \
 	&& apt-get -qqy install google-chrome-stable \
@@ -14,17 +29,13 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # ChromeDriver
 
 ARG CHROME_DRIVER_VERSION=2.40
-RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
+RUN echo "# Installing ChromeDriver" \
+    && wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
 	&& rm -rf /opt/chromedriver \
 	&& unzip /tmp/chromedriver_linux64.zip -d /opt \
 	&& rm /tmp/chromedriver_linux64.zip \
 	&& mv /opt/chromedriver /opt/chromedriver-$CHROME_DRIVER_VERSION \
 	&& chmod 755 /opt/chromedriver-$CHROME_DRIVER_VERSION \
 && ln -fs /opt/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
-
-# Cert. stuff (certutil ...)
-
-RUN apt-get update -qqy \
-    && apt-get -qqy install libnss3-tools
 
 ENV CHROME_BIN=/usr/bin/google-chrome
