@@ -1,6 +1,6 @@
 FROM maven:3.5.4-jdk-8
 
-# Node & NPM
+# Nodejs
 ARG NODE_VERSION=11
 RUN echo "# Installing Nodejs" && \
     curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
@@ -8,7 +8,9 @@ RUN echo "# Installing Nodejs" && \
     npm set strict-ssl false && \
     npm install -g npm@latest && \
     npm install node-sass@latest
-    npm cache clear -f
+    npm cache clear -f && \
+    npm install -g n && \
+    n stable
 
 # confirm installation
 RUN node -v
