@@ -8,9 +8,7 @@ RUN echo "# Installing Nodejs" && \
     npm set strict-ssl false && \
     npm install -g npm@latest && \
     npm install node-sass@latest && \
-    npm cache clear -f && \
-    npm install -g n && \
-    n stable
+    npm cache clear -f
 
 # confirm installation
 RUN node -v
@@ -19,7 +17,7 @@ RUN npm -v
 # Google Chrome
 
 RUN echo "# Installing Google Chrome" \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub \
 	&& echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 	&& apt-get update -qqy \
 	&& apt-get -qqy install google-chrome-stable \
